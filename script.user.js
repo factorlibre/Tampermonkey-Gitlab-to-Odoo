@@ -38,7 +38,7 @@
             button.classList.add('btn', 'hide-collapsed', 'btn-default', 'btn-sm', 'gl-button');
             const span = document.createElement('span');
             const img = document.createElement('img');
-            img.href = 'https://gextia.com/wp-content/uploads/2025/01/gextia-favicon-150x150.png'
+            img.src = 'https://gextia.com/wp-content/uploads/2025/01/gextia-favicon-150x150.png'
             img.height = '25'
             img.alt = ''
             span.innerText = 'Abrir en Gextia';
