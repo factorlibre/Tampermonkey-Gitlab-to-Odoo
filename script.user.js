@@ -17,9 +17,13 @@
 (function() {
     'use strict';
 
+    function setOdooUrl(){
+        GM_setValue('odoo_url', prompt("¿Cual es la url a conectar? Ej.: 'https://odoo.tu-empresa.com'"))
+    }
+
     window.addEventListener('load', function() {
-        if (GM_getValue('odoo_url','') === ''){
-            GM_setValue('odoo_url', prompt("¿Cual es la url a conectar? Ej.: 'https://odoo.tu-empresa.com'"))
+        if (!GM_getValue('odoo_url','')?.startsWith('https://')){
+            setOdooUrl()
         }
         // Selecciona el elemento donde quieres añadir el botón
         const sidebar = document.querySelector('.issuable-sidebar-header div[data-testid="sidebar-todo"]');
@@ -32,10 +36,13 @@
             button.appendChild(span);
 
             // Añade un evento al botón para enviar la URL
-            button.addEventListener('click', function() {
-                const url = window.location.href;
-
-                window.open(GM_getValue('odoo_url')+"/gitlab/go-to-task?incoming_url=" + url);
+            button.addEventListener('click', (event) => {
+                if (event.altKey){
+                     setOdooUrl()
+                }else{
+                    const url = window.location.href;
+                    window.open(GM_getValue('odoo_url','')+"/gitlab/go-to-task?incoming_url=" + url);
+                }
             });
 
             // Añade el botón al sidebar
