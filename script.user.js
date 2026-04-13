@@ -4,8 +4,9 @@
 // @version      2026-04-13
 // @description  try to take over the world!
 // @author       Factor Libre - Jesús Lorenzo
-// @match        https://git.factorlibre.com/*
-// @icon         https://odoo.factorlibre.com/web_favicon/favicon
+// @match        https://git.*
+// @match        https://*.gitlab.*
+// @icon         https://gextia.com/wp-content/uploads/2025/01/gextia-favicon-150x150.png
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -18,7 +19,7 @@
 
     window.addEventListener('load', function() {
         if (GM_getValue('odoo_url','') === ''){
-            GM_setValue('odoo_url', prompt("¿Cual es la url a conectar? Ej.: 'https://factorlibre.gextia.io'"))
+            GM_setValue('odoo_url', prompt("¿Cual es la url a conectar? Ej.: 'https://odoo.tu-empresa.com'"))
         }
         // Selecciona el elemento donde quieres añadir el botón
         const sidebar = document.querySelector('.issuable-sidebar-header div[data-testid="sidebar-todo"]');
