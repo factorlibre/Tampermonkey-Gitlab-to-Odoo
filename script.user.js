@@ -18,7 +18,7 @@
 
     // ── Config ─────────────────────────────────────────────────────
     const ODOO_MODEL   = 'project.task';
-    const SEARCH_FIELD = 'x_gitlab_url';   // campo donde está la URL de la issue
+    const SEARCH_FIELD = 'gitlab_issue_url';   // campo donde está la URL de la issue
     // ───────────────────────────────────────────────────────────────
 
     function getOrAskValue(key, promptMsg) {
