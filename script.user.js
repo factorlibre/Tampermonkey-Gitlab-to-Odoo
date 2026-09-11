@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         Gitlab To Odoo
 // @namespace    http://tampermonkey.net/
-// @version      2026-09-11.2
-// @description  Abre la tarea de Gextia correspondiente a la issue/MR de GitLab
+// @version      2026-09-11.3
+// @description  Abre la tarea de Gextia correspondiente a la issue de GitLab
 // @author       Factor Libre - Jesús Lorenzo
-// @include      https://git.*.com/*
-// @include      https://*.gitlab.*/*
+// @include      https://git.*.com/*/-/issues/*
+// @include      https://*.gitlab.*/*/-/issues/*
 // @icon         https://gextia.com/wp-content/uploads/2025/01/gextia-favicon-150x150.png
 // @require      https://raw.githubusercontent.com/Zarritas/tm-framework/main/dist/tm-gitlab-dom.js
 // @grant        GM_xmlhttpRequest
@@ -102,6 +102,6 @@
         });
     }, {
         guard: BUTTON_ID,
-        match: ctx => ctx.type === 'issue' || ctx.type === 'merge_request'
+        match: ctx => ctx.type === 'issue'
     });
 })();
