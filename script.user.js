@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gitlab To Odoo
 // @namespace    http://tampermonkey.net/
-// @version      2026-09-11
+// @version      2026-09-11.1
 // @description  Abre la tarea de Gextia correspondiente a la issue/MR de GitLab
 // @author       Factor Libre - Jesús Lorenzo
 // @include      https://git.*.com/*
@@ -11,6 +11,8 @@
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
+// @grant        GM_registerMenuCommand
+// @grant        GM_unregisterMenuCommand
 // @updateURL    https://github.com/factorlibre/Tampermonkey-Gitlab-to-Odoo/raw/refs/heads/main/script.user.js
 // @downloadURL  https://github.com/factorlibre/Tampermonkey-Gitlab-to-Odoo/raw/refs/heads/main/script.user.js
 // ==/UserScript==
@@ -49,6 +51,35 @@
         }
     }
 
+    // Preferencia de si el botón muestra su texto o sólo el icono, alternable
+    // desde el menú de Tampermonkey.
+    const LABELS_KEY = 'tm_button_labels';
+    let menuId = null;
+
+    function registrarMenu() {
+        if (typeof GM_registerMenuCommand !== 'function') return;
+
+        // Re-registrar para que el texto del menú refleje el estado actual.
+        if (menuId !== null && typeof GM_unregisterMenuCommand === 'function') {
+            GM_unregisterMenuCommand(menuId);
+        }
+
+        menuId = GM_registerMenuCommand(
+            DOM.areButtonLabelsVisible()
+                ? 'Ocultar texto de los botones'
+                : 'Mostrar texto de los botones',
+            () => aplicarEtiquetas(!DOM.areButtonLabelsVisible())
+        );
+    }
+
+    function aplicarEtiquetas(visible) {
+        GM_setValue(LABELS_KEY, DOM.setButtonLabels(visible));
+        registrarMenu();
+    }
+
+    DOM.setButtonLabels(GM_getValue(LABELS_KEY, true));
+    registrarMenu();
+
     // GitLab 18.x renderiza las issues como una app Vue: no hay "load" al
     // navegar de una tarea a otra, y el header se vuelve a pintar solo
     // tirándose el botón por delante. onPage cubre ambos casos y el guard
@@ -58,20 +89,13 @@
             setOdooUrl()
         }
 
-        const button = DOM.injectButton({
+        DOM.injectButton({
             id: BUTTON_ID,
             text: 'Abrir en Gextia',
+            iconUrl: ICON_URL,
             title: 'Abrir la tarea en Gextia (Alt+click para cambiar la URL)',
             onClick: abrirEnGextia
         });
-
-        if (button && !button.querySelector('img')) {
-            const img = document.createElement('img');
-            img.src = ICON_URL;
-            img.height = '25';
-            img.alt = '';
-            button.prepend(img);
-        }
     }, {
         guard: BUTTON_ID,
         match: ctx => ctx.type === 'issue' || ctx.type === 'merge_request'
