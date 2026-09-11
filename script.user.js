@@ -10,8 +10,8 @@
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
-// @updateURL    https://github.com/Zarritas/Tampermonkey-Gitlab-to-Odoo/raw/refs/heads/main/script.user.js
-// @downloadURL  https://github.com/Zarritas/Tampermonkey-Gitlab-to-Odoo/raw/refs/heads/main/script.user.js
+// @updateURL    https://github.com/factorlibre/Tampermonkey-Gitlab-to-Odoo/raw/refs/heads/main/script.user.js
+// @downloadURL  https://github.com/factorlibre/Tampermonkey-Gitlab-to-Odoo/raw/refs/heads/main/script.user.js
 // ==/UserScript==
 
 (function() {
