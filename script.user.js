@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gitlab To Odoo
 // @namespace    http://tampermonkey.net/
-// @version      2026-09-11.1
+// @version      2026-09-11.2
 // @description  Abre la tarea de Gextia correspondiente a la issue/MR de GitLab
 // @author       Factor Libre - Jesús Lorenzo
 // @include      https://git.*.com/*
@@ -94,6 +94,10 @@
             text: 'Abrir en Gextia',
             iconUrl: ICON_URL,
             title: 'Abrir la tarea en Gextia (Alt+click para cambiar la URL)',
+            // Junto al botón Edit, y también en el header condensado que
+            // GitLab saca al hacer scroll hacia arriba (esa copia es
+            // BUTTON_ID--sticky).
+            placement: 'header',
             onClick: abrirEnGextia
         });
     }, {
