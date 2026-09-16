@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gitlab To Odoo
 // @namespace    http://tampermonkey.net/
-// @version      2026-09-16
+// @version      2026-09-16.1
 // @description  Abre la tarea de Gextia correspondiente a la issue de GitLab
 // @author       Factor Libre - Jesús Lorenzo
 // @include      https://git.*.com/*/-/issues/*
@@ -49,7 +49,7 @@
             setOdooUrl()
         }else{
             const url = window.location.href;
-            window.open(GM_getValue('odoo_url','')+"/gitlab/go-to-task?incoming_url=" + url);
+            window.open(GM_getValue('odoo_url','')+"/gitlab/go-to-task?incoming_url=" + url.replace('work_items','issues'));
         }
     }
 
