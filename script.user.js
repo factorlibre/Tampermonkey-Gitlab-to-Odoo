@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         Gitlab To Odoo
 // @namespace    http://tampermonkey.net/
-// @version      2026-09-11.3
+// @version      2026-09-16
 // @description  Abre la tarea de Gextia correspondiente a la issue de GitLab
 // @author       Factor Libre - Jesús Lorenzo
 // @include      https://git.*.com/*/-/issues/*
 // @include      https://*.gitlab.*/*/-/issues/*
+// @include      https://git.*.com/*/-/work_items/*
+// @include      https://*.gitlab.*/*/-/work_items/*
 // @icon         https://gextia.com/wp-content/uploads/2025/01/gextia-favicon-150x150.png
 // @require      https://raw.githubusercontent.com/Zarritas/tm-framework/main/dist/tm-gitlab-dom.js
 // @grant        GM_xmlhttpRequest
