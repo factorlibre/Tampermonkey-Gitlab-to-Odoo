@@ -1,109 +1,37 @@
 // ==UserScript==
-// @name         Gitlab To Odoo
-// @namespace    http://tampermonkey.net/
-// @version      2026-09-16.1
-// @description  Abre la tarea de Gextia correspondiente a la issue de GitLab
-// @author       Factor Libre - Jesús Lorenzo
+// @name         GitLab — Abrir en Gextia
+// @namespace    https://factorlibre.com/gextia
+// @version      2026-09-21
+// @description  PUENTE DE MIGRACIÓN — el script vive ahora en gitlab-to-gextia/gitlab-to-gextia.user.js
+// @author       Jesús Lorenzo
+// @icon         https://academy.factorlibre.com//web/image/website/1/favicon?unique=0bd9648
+// @homepageURL  https://git.factorlibre.com/jesus.lorenzo/tm-estado-sitios
+// @supportURL   https://git.factorlibre.com/jesus.lorenzo/tm-estado-sitios/-/issues
+// @updateURL    https://git.factorlibre.com/jesus.lorenzo/tm-estado-sitios/-/raw/master/gitlab-to-gextia/gitlab-to-gextia.user.js
+// @downloadURL  https://git.factorlibre.com/jesus.lorenzo/tm-estado-sitios/-/raw/master/gitlab-to-gextia/gitlab-to-gextia.user.js
 // @include      https://git.*.com/*/-/issues/*
 // @include      https://*.gitlab.*/*/-/issues/*
 // @include      https://git.*.com/*/-/work_items/*
 // @include      https://*.gitlab.*/*/-/work_items/*
-// @icon         https://gextia.com/wp-content/uploads/2025/01/gextia-favicon-150x150.png
-// @require      https://raw.githubusercontent.com/Zarritas/tm-framework/main/dist/tm-gitlab-dom.js
-// @grant        GM_xmlhttpRequest
-// @grant        GM_setValue
-// @grant        GM_getValue
-// @grant        GM_registerMenuCommand
-// @grant        GM_unregisterMenuCommand
-// @updateURL    https://github.com/factorlibre/Tampermonkey-Gitlab-to-Odoo/raw/refs/heads/main/script.user.js
-// @downloadURL  https://github.com/factorlibre/Tampermonkey-Gitlab-to-Odoo/raw/refs/heads/main/script.user.js
 // ==/UserScript==
 
-(function() {
-    'use strict';
-
-    const BUTTON_ID = 'gl-to-gextia-btn';
-    const ICON_URL = 'https://gextia.com/wp-content/uploads/2025/01/gextia-favicon-150x150.png';
-
-    // Todos los selectores de GitLab viven en TMGitLabDOM (tm-framework):
-    // desde GitLab 18.x las issues usan la vista "work item" y los MRs siguen
-    // con el sidebar clásico, así que cada lookup depende del layout.
-    if (!globalThis.TMGitLabDOM) {
-        console.error('[Gitlab To Odoo] TMGitLabDOM no se ha cargado. Revisa el @require.');
-        return;
-    }
-
-    const DOM = globalThis.TMGitLabDOM;
-
-    function setOdooUrl(){
-        const new_url = prompt("¿Cual es la url a conectar? Ej.: 'https://gextia.tu-empresa.com'")
-        if (new_url){
-            GM_setValue('odoo_url', new_url)
-        }else{
-            GM_setValue('odoo_url',GM_getValue('odoo_url',''))
-        }
-    }
-
-    function abrirEnGextia(event) {
-        if (event.altKey){
-            setOdooUrl()
-        }else{
-            const url = window.location.href;
-            window.open(GM_getValue('odoo_url','')+"/gitlab/go-to-task?incoming_url=" + url.replace('work_items','issues'));
-        }
-    }
-
-    // Preferencia de si el botón muestra su texto o sólo el icono, alternable
-    // desde el menú de Tampermonkey.
-    const LABELS_KEY = 'tm_button_labels';
-    let menuId = null;
-
-    function registrarMenu() {
-        if (typeof GM_registerMenuCommand !== 'function') return;
-
-        // Re-registrar para que el texto del menú refleje el estado actual.
-        if (menuId !== null && typeof GM_unregisterMenuCommand === 'function') {
-            GM_unregisterMenuCommand(menuId);
-        }
-
-        menuId = GM_registerMenuCommand(
-            DOM.areButtonLabelsVisible()
-                ? 'Ocultar texto de los botones'
-                : 'Mostrar texto de los botones',
-            () => aplicarEtiquetas(!DOM.areButtonLabelsVisible())
-        );
-    }
-
-    function aplicarEtiquetas(visible) {
-        GM_setValue(LABELS_KEY, DOM.setButtonLabels(visible));
-        registrarMenu();
-    }
-
-    DOM.setButtonLabels(GM_getValue(LABELS_KEY, true));
-    registrarMenu();
-
-    // GitLab 18.x renderiza las issues como una app Vue: no hay "load" al
-    // navegar de una tarea a otra, y el header se vuelve a pintar solo
-    // tirándose el botón por delante. onPage cubre ambos casos y el guard
-    // evita duplicarlo.
-    DOM.onPage(() => {
-        if (!GM_getValue('odoo_url','')?.startsWith('https://')){
-            setOdooUrl()
-        }
-
-        DOM.injectButton({
-            id: BUTTON_ID,
-            text: 'Abrir en Gextia',
-            iconUrl: ICON_URL,
-            title: 'Abrir la tarea en Gextia (Alt+click para cambiar la URL)',
-            // Junto al botón Edit, y también en el header condensado que
-            // GitLab saca al hacer scroll hacia arriba (esa copia es
-            // BUTTON_ID--sticky).
-            placement: 'header',
-            onClick: abrirEnGextia
-        });
-    }, {
-        guard: BUTTON_ID,
-        match: ctx => ctx.type === 'issue'
-    });
-})();
+/*
+ * Este fichero ya NO es el script: solo existe para no romper la actualización
+ * automática de quien lo instaló cuando vivía en GitHub.
+ *
+ * Tampermonkey comprueba la @version en la URL con la que se instaló el script
+ * (@updateURL) y, si hay una más alta, descarga el cuerpo desde @downloadURL.
+ * Al llevar aquí una versión superior a la instalada y apuntar los dos al
+ * GitLab, una instalación antigua se actualiza una única vez desde aquí y a
+ * partir de entonces sigue ya la ruta definitiva. Sin este puente la URL vieja
+ * daría 404 y Tampermonkey dejaría de actualizar el script en silencio.
+ *
+ * NO instalar desde aquí. El script está en:
+ *   https://git.factorlibre.com/jesus.lorenzo/tm-estado-sitios/-/raw/master/gitlab-to-gextia/gitlab-to-gextia.user.js
+ *
+ * Requiere sesión iniciada en git.factorlibre.com.
+ */
+console.info(
+    "[gitlab-to-gextia] Este fichero es un puente de migración. El script está en " +
+        "https://git.factorlibre.com/jesus.lorenzo/tm-estado-sitios/-/raw/master/gitlab-to-gextia/gitlab-to-gextia.user.js"
+);
